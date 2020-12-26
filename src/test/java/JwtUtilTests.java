@@ -15,4 +15,16 @@ class JwtUtilTests {
                 "\"payload\":{\"sub\":\"1234567890\",\"name\":\"John Doe\",\"admin\":true,\"iat\":1516239022}}"
         );
     }
+
+    @Test
+    void shouldDecodeAndValidateJwt() {
+        String jwt = ResourceLoader.loadJwt();
+        PublicKey publicKey = ResourceLoader.loadRsaPublicKey();
+        String decodedJwt = JwtUtil.decodeAndValidateJwt(jwt, publicKey);
+        assertThat(decodedJwt).isEqualTo(
+                "{\"header\":{\"alg\":\"RS256\",\"typ\":\"JWT\"}," +
+                "\"payload\":{\"sub\":\"1234567890\",\"name\":\"John Doe\",\"admin\":true,\"iat\":1516239022}," +
+                "\"validSignature\":true}"
+        );
+    }
 }
