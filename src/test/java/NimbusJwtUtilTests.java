@@ -1,10 +1,11 @@
+import com.nimbusds.jwt.JWT;
 import org.junit.jupiter.api.Test;
 
 import java.security.interfaces.RSAPublicKey;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NimbusJwtUtilTests {
+class NimbusJwtUtilTests {
 
     @Test
     void shouldDecodeJwt() {
@@ -26,5 +27,12 @@ public class NimbusJwtUtilTests {
                 "\"payload\":{\"sub\":\"1234567890\",\"name\":\"John Doe\",\"admin\":true,\"iat\":1516239022}," +
                 "\"validSignature\":true}"
         );
+    }
+
+    @Test
+    void shouldGetSingleClaim() throws Exception {
+        String encodedJwt = ResourceLoader.loadJwt();
+        JWT jwt = NimbusJwtUtil.parseJwt(encodedJwt);
+        assertThat(jwt.getJWTClaimsSet().getStringClaim("name")).isEqualTo("John Doe");
     }
 }
