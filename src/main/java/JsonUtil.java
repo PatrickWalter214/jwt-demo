@@ -16,4 +16,13 @@ public class JsonUtil {
             throw new RuntimeException("Could not convert JSON input", e);
         }
     }
+
+    public static <T> T mapJsonStringToObject(String json, Class<T> targetClass) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.readValue(json, targetClass);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Could not map JSON input", e);
+        }
+    }
 }
