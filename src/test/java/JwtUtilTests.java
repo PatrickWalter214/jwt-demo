@@ -8,9 +8,9 @@ class JwtUtilTests {
 
     @Test
     void shouldDecodeJwt() {
-        String jwt = ResourceLoader.loadJwt();
-        String decodedJwt = JwtUtil.decodeJwt(jwt);
-        assertThat(decodedJwt).isEqualTo(
+        String encodedJwt = ResourceLoader.loadJwt();
+        String jwt = JwtUtil.decodeJwt(encodedJwt);
+        assertThat(jwt).isEqualTo(
                 "{\"header\":{\"alg\":\"RS256\",\"typ\":\"JWT\"}," +
                 "\"payload\":{\"sub\":\"1234567890\",\"name\":\"John Doe\",\"admin\":true,\"iat\":1516239022}}"
         );
@@ -18,10 +18,10 @@ class JwtUtilTests {
 
     @Test
     void shouldDecodeAndValidateJwt() {
-        String jwt = ResourceLoader.loadJwt();
+        String encodedJwt = ResourceLoader.loadJwt();
         RSAPublicKey publicKey = ResourceLoader.loadRsaPublicKey();
-        String decodedJwt = JwtUtil.decodeAndValidateJwt(jwt, publicKey);
-        assertThat(decodedJwt).isEqualTo(
+        String jwt = JwtUtil.decodeAndValidateJwt(encodedJwt, publicKey);
+        assertThat(jwt).isEqualTo(
                 "{\"header\":{\"alg\":\"RS256\",\"typ\":\"JWT\"}," +
                 "\"payload\":{\"sub\":\"1234567890\",\"name\":\"John Doe\",\"admin\":true,\"iat\":1516239022}," +
                 "\"validSignature\":true}"

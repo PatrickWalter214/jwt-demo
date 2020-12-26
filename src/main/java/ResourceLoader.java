@@ -29,13 +29,13 @@ public class ResourceLoader {
         return generateRsaPublicKey(publicKey);
     }
 
-    private static RSAPublicKey generateRsaPublicKey(byte[] publicKey) {
+    private static byte[] readResource(String resource) {
+        URL resourceUrl = ResourceLoader.class.getClassLoader().getResource(resource);
         try {
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);
-            return (RSAPublicKey) keyFactory.generatePublic(keySpec);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException("Could not generate rsa public key", e);
+            Path publicKeyPath = Paths.get(resourceUrl.toURI());
+            return Files.readAllBytes(publicKeyPath);
+        } catch (URISyntaxException | IOException e) {
+            throw new RuntimeException("Could not read resource", e);
         }
     }
 
@@ -48,13 +48,13 @@ public class ResourceLoader {
         return Base64.getDecoder().decode(encodedPublicKey);
     }
 
-    private static byte[] readResource(String resource) {
-        URL resourceUrl = ResourceLoader.class.getClassLoader().getResource(resource);
+    private static RSAPublicKey generateRsaPublicKey(byte[] publicKey) {
         try {
-            Path publicKeyPath = Paths.get(resourceUrl.toURI());
-            return Files.readAllBytes(publicKeyPath);
-        } catch (URISyntaxException | IOException e) {
-            throw new RuntimeException("Could not read resource", e);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);
+            return (RSAPublicKey) keyFactory.generatePublic(keySpec);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException("Could not generate rsa public key", e);
         }
     }
 }

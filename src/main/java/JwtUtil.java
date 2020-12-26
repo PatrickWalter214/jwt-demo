@@ -1,5 +1,8 @@
 import java.nio.charset.StandardCharsets;
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Base64;
 
@@ -29,6 +32,10 @@ public class JwtUtil {
         return String.format("{%s,%s,%s}", headerField, payloadField, validSignatureField);
     }
 
+    private static String[] splitJwt(String jwt) {
+        return jwt.split("\\.");
+    }
+
     private static boolean verifySignature(String jwt, RSAPublicKey publicKey) {
         String[] jwtParts = splitJwt(jwt);
         String assessablePart = String.format("%s.%s", jwtParts[0], jwtParts[1]);
@@ -41,9 +48,5 @@ public class JwtUtil {
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
             throw new RuntimeException("Could not verify signature", e);
         }
-    }
-
-    private static String[] splitJwt(String jwt) {
-        return jwt.split("\\.");
     }
 }

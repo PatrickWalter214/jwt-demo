@@ -6,18 +6,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JsonUtilTests {
 
     @Test
-    void shouldConvertJsonToNode() {
-        String jwt = ResourceLoader.loadJwt();
-        String decodedJwt = JwtUtil.decodeJwt(jwt);
-        JsonNode jsonNode = JsonUtil.convertJsonStringToNode(decodedJwt);
+    void shouldGetNameFieldFromJson() {
+        String encodedJwt = ResourceLoader.loadJwt();
+        String jwt = JwtUtil.decodeJwt(encodedJwt);
+        JsonNode jsonNode = JsonUtil.convertJsonStringToNode(jwt);
         assertThat(jsonNode.get("payload").get("name").textValue()).isEqualTo("John Doe");
     }
 
     @Test
     void shouldConvertJsonToSampleJwt() {
-        String jwt = ResourceLoader.loadJwt();
-        String decodedJwt = JwtUtil.decodeJwt(jwt);
-        SampleJwt sampleJwt = JsonUtil.mapJsonStringToObject(decodedJwt, SampleJwt.class);
+        String encodedJwt = ResourceLoader.loadJwt();
+        String jwt = JwtUtil.decodeJwt(encodedJwt);
+        SampleJwt sampleJwt = JsonUtil.mapJsonStringToObject(jwt, SampleJwt.class);
         assertThat(sampleJwt).isEqualTo(getTestSampleJwt());
     }
 
