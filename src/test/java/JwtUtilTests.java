@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.Test;
 
-import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,7 +19,7 @@ class JwtUtilTests {
     @Test
     void shouldDecodeAndValidateJwt() {
         String jwt = ResourceLoader.loadJwt();
-        PublicKey publicKey = ResourceLoader.loadRsaPublicKey();
+        RSAPublicKey publicKey = ResourceLoader.loadRsaPublicKey();
         String decodedJwt = JwtUtil.decodeAndValidateJwt(jwt, publicKey);
         assertThat(decodedJwt).isEqualTo(
                 "{\"header\":{\"alg\":\"RS256\",\"typ\":\"JWT\"}," +

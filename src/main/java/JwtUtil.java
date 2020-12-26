@@ -1,5 +1,6 @@
 import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Base64;
 
 public class JwtUtil {
@@ -17,7 +18,7 @@ public class JwtUtil {
         return String.format("{%s,%s}", headerField, payloadField);
     }
 
-    public static String decodeAndValidateJwt(String jwt, PublicKey publicKey) {
+    public static String decodeAndValidateJwt(String jwt, RSAPublicKey publicKey) {
         String[] jwtParts = splitJwt(jwt);
         String jwtHeaderJson = new String(Base64.getUrlDecoder().decode(jwtParts[0]), StandardCharsets.UTF_8);
         String jwtPayloadJson = new String(Base64.getUrlDecoder().decode(jwtParts[1]), StandardCharsets.UTF_8);
@@ -28,7 +29,7 @@ public class JwtUtil {
         return String.format("{%s,%s,%s}", headerField, payloadField, validSignatureField);
     }
 
-    private static boolean verifySignature(String jwt, PublicKey publicKey) {
+    private static boolean verifySignature(String jwt, RSAPublicKey publicKey) {
         String[] jwtParts = splitJwt(jwt);
         String assessablePart = String.format("%s.%s", jwtParts[0], jwtParts[1]);
         byte[] signature = Base64.getUrlDecoder().decode(jwtParts[2]);
